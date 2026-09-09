@@ -21,8 +21,11 @@ func IsValidStatus(s string) bool {
 
 // User represents a registered account.
 // PasswordHash is never sent back in JSON responses (json:"-").
+// Name is optional — the assignment's contract only requires email/password,
+// so registration must still succeed if a caller omits it.
 type User struct {
 	ID           int64  `json:"id"`
+	Name         string `json:"name,omitempty"`
 	Email        string `json:"email"`
 	PasswordHash string `json:"-"`
 }

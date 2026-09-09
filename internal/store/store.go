@@ -53,6 +53,7 @@ func (s *Store) migrate() error {
 	schema := `
 	CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT,
 		email TEXT UNIQUE NOT NULL,
 		password_hash TEXT NOT NULL
 	);
@@ -75,10 +76,11 @@ func (s *Store) migrate() error {
 // ---------- Users ----------
 
 // CreateUser inserts a new user with an already-hashed password.
-func (s *Store) CreateUser(email, passwordHash string) (*models.User, error) {
+// name may be empty — it's an optional field.
+func (s *Store) CreateUser(name, email, passwordHash string) (*models.User, error) {
 	res, err := s.db.Exec(
-		`INSERT INTO users (email, password_hash) VALUES (?, ?)`,
-		email, passwordHash,
+		`INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)`,
+		name, email, passwordHash,
 	)
 	if err != nil {
 		// SQLite raises a "UNIQUE constraint failed" error for duplicate emails.
@@ -91,21 +93,23 @@ func (s *Store) CreateUser(email, passwordHash string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &models.User{ID: id, Email: email, PasswordHash: passwordHash}, nil
+	return &models.User{ID: id, Name: name, Email: email, PasswordHash: passwordHash}, nil
 }
 
 // GetUserByEmail looks up a user for login.
 func (s *Store) GetUserByEmail(email string) (*models.User, error) {
 	row := s.db.QueryRow(
-		`SELECT id, email, password_hash FROM users WHERE email = ?`, email,
+		`SELECT id, name, email, password_hash FROM users WHERE email = ?`, email,
 	)
 	var u models.User
-	if err := row.Scan(&u.ID, &u.Email, &u.PasswordHash); err != nil {
+	var name sql.NullString
+	if err := row.Scan(&u.ID, &name, &u.Email, &u.PasswordHash); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, ErrNotFound
 		}
 		return nil, err
 	}
+	u.Name = name.String
 	return &u, nil
 }
 
