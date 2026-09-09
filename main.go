@@ -4,11 +4,14 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+
+	"ticket-system/internal/handlers"
+	"ticket-system/internal/store"
 )
 
 // healthHandler responds to GET /health.
-// This is the endpoint the assignment says must be publicly reachable
-// once deployed, with no authentication required.
+// This must stay publicly reachable with no auth once deployed.
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -16,13 +19,30 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "ticket-system.db"
+	}
+
+	s, err := store.New(dbPath)
+	if err != nil {
+		log.Fatalf("failed to open database: %v", err)
+	}
+
+	h := handlers.New(s)
+
 	mux := http.NewServeMux()
-
-	// Go 1.22+ lets you specify the HTTP method directly in the pattern.
 	mux.HandleFunc("GET /health", healthHandler)
+	mux.HandleFunc("POST /auth/register", h.Register)
+	mux.HandleFunc("POST /auth/login", h.Login)
 
-	log.Println("Server starting on port 8080...")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("Server starting on port %s...\n", port)
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
 		log.Fatal(err)
 	}
 }
