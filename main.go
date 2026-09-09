@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"ticket-system/internal/handlers"
+	"ticket-system/internal/middleware"
 	"ticket-system/internal/store"
 )
 
@@ -35,6 +36,11 @@ func main() {
 	mux.HandleFunc("GET /health", healthHandler)
 	mux.HandleFunc("POST /auth/register", h.Register)
 	mux.HandleFunc("POST /auth/login", h.Login)
+
+	mux.HandleFunc("POST /tickets", middleware.RequireAuth(h.CreateTicket))
+	mux.HandleFunc("GET /tickets", middleware.RequireAuth(h.ListTickets))
+	mux.HandleFunc("GET /tickets/{id}", middleware.RequireAuth(h.GetTicket))
+	mux.HandleFunc("PATCH /tickets/{id}/status", middleware.RequireAuth(h.UpdateTicketStatus))
 
 	port := os.Getenv("PORT")
 	if port == "" {
