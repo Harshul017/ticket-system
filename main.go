@@ -42,13 +42,15 @@ func main() {
 	mux.HandleFunc("GET /tickets/{id}", middleware.RequireAuth(h.GetTicket))
 	mux.HandleFunc("PATCH /tickets/{id}/status", middleware.RequireAuth(h.UpdateTicketStatus))
 
+	handler := middleware.CORS(mux)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
 	log.Printf("Server starting on port %s...\n", port)
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		log.Fatal(err)
 	}
 }
