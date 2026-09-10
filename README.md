@@ -14,7 +14,7 @@ A minimal frontend is included as a bonus on top of the required backend.
 |---|---|
 | Backend API | https://ticket-system-2vw9.onrender.com |
 | Public health check | https://ticket-system-2vw9.onrender.com/health |
-| Frontend | https://ticket-system-1.onrender.com |
+| Frontend | https://ticket-system-1-ty2z.onrender.com/ |
 | GitHub repo | https://github.com/Harshul017/ticket-system |
 
 ---
