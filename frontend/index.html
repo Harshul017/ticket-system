@@ -6,24 +6,21 @@
 <title>Ticket Desk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F5F6F8;
+    --bg: #F6F4EF;
     --surface: #FFFFFF;
-    --border: #E3E5EA;
-    --ink: #14161A;
-    --muted: #6B7280;
-    --accent: #2F5FE0;
-    --accent-ink: #FFFFFF;
-    --danger: #C0392B;
-    --danger-bg: #FDEEEC;
-    --status-open: #2563EB;
-    --status-open-bg: #EAF0FE;
-    --status-progress: #B45309;
-    --status-progress-bg: #FEF3E2;
-    --status-closed: #4B5563;
-    --status-closed-bg: #EEF0F3;
+    --ink: #141414;
+    --muted: #706E66;
+    --line: #E5E2D8;
+    --danger: #B3261E;
+    --danger-bg: #FBEAE8;
+    --ok-bg: #EAF3EA;
+    --ok: #1E5E2E;
+    --dot-open: #2F6FED;
+    --dot-progress: #C9860A;
+    --dot-closed: #8A8A82;
   }
 
   * { box-sizing: border-box; }
@@ -36,87 +33,79 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  a { color: var(--accent); }
+  .display { font-family: 'Space Grotesk', 'Inter', sans-serif; }
 
-  button {
-    font-family: inherit;
-    cursor: pointer;
-  }
+  button { font-family: inherit; cursor: pointer; }
 
   button:focus-visible,
   input:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--ink);
     outline-offset: 2px;
   }
+
+  /* ---------- Pills (shared language: tabs, filters, badges) ---------- */
+
+  .pill-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .pill.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .pill:hover:not(.active) { background: rgba(20,20,20,0.05); }
 
   /* ---------- Auth screen ---------- */
 
   .auth-screen {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 24px;
   }
 
-  .auth-card {
+  .auth-wrap {
     width: 100%;
     max-width: 380px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 32px;
   }
 
-  .auth-card h1 {
-    font-size: 20px;
+  .wordmark {
+    font-size: 30px;
     font-weight: 700;
-    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
   }
 
-  .auth-card .subtitle {
+  .auth-wrap > .subtitle {
     color: var(--muted);
     font-size: 14px;
-    margin: 0 0 24px;
+    margin: 0 0 28px;
   }
 
-  .tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--bg);
-    border-radius: 8px;
-    padding: 4px;
-    margin-bottom: 24px;
-  }
-
-  .tab {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 8px 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--muted);
-    border-radius: 6px;
-  }
-
-  .tab.active {
-    background: var(--surface);
-    color: var(--ink);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-  }
-
-  .field {
-    margin-bottom: 16px;
-  }
+  .field { margin-bottom: 16px; }
 
   .field label {
     display: block;
     font-size: 13px;
     font-weight: 500;
     margin-bottom: 6px;
-    color: var(--ink);
   }
 
   .field .hint {
@@ -128,43 +117,43 @@
   input, textarea {
     width: 100%;
     font-size: 14px;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
+    padding: 11px 14px;
+    border: 1.5px solid var(--line);
     border-radius: 8px;
     background: var(--surface);
     color: var(--ink);
+    font-family: inherit;
   }
 
-  textarea {
-    resize: vertical;
-    min-height: 72px;
-  }
+  input:focus, textarea:focus { border-color: var(--ink); }
+
+  textarea { resize: vertical; min-height: 76px; }
 
   .btn-primary {
     width: 100%;
-    background: var(--accent);
-    color: var(--accent-ink);
-    border: none;
+    background: var(--ink);
+    color: var(--bg);
+    border: 1.5px solid var(--ink);
     border-radius: 8px;
-    padding: 11px 0;
+    padding: 12px 0;
     font-size: 14px;
     font-weight: 600;
   }
 
-  .btn-primary:hover { filter: brightness(0.94); }
-  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.5; cursor: default; }
 
-  .error-banner {
-    background: var(--danger-bg);
-    color: var(--danger);
+  .banner {
     font-size: 13px;
-    padding: 10px 12px;
+    padding: 10px 14px;
     border-radius: 8px;
     margin-bottom: 16px;
     display: none;
   }
 
-  .error-banner.visible { display: block; }
+  .banner.visible { display: block; }
+  .banner.error { background: var(--danger-bg); color: var(--danger); }
+  .banner.ok { background: var(--ok-bg); color: var(--ok); }
 
   /* ---------- Dashboard ---------- */
 
@@ -172,77 +161,96 @@
   .app.visible { display: block; }
 
   .topbar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
+    border-bottom: 1.5px solid var(--ink);
+    padding: 20px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .topbar .brand {
-    font-weight: 700;
-    font-size: 16px;
-  }
-
   .topbar .who {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
     font-size: 13px;
     color: var(--muted);
   }
 
-  .btn-ghost {
+  .btn-outline {
     background: transparent;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--ink);
     border-radius: 8px;
-    padding: 7px 14px;
+    padding: 7px 16px;
     font-size: 13px;
     font-weight: 500;
     color: var(--ink);
   }
 
-  .btn-ghost:hover { background: var(--bg); }
+  .btn-outline:hover { background: rgba(20,20,20,0.05); }
 
   .layout {
-    max-width: 1040px;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 32px 24px;
+    padding: 40px 32px 80px;
     display: grid;
     grid-template-columns: 300px 1fr;
-    gap: 24px;
+    gap: 40px;
     align-items: start;
   }
 
-  @media (max-width: 720px) {
-    .layout { grid-template-columns: 1fr; }
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; padding: 28px 20px 60px; }
   }
 
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-
-  .panel h2 {
-    font-size: 15px;
+  .panel-title {
+    font-size: 13px;
     font-weight: 600;
+    color: var(--muted);
     margin: 0 0 16px;
+  }
+
+  .btn-small-primary {
+    width: 100%;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    padding: 11px 0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .btn-small-primary:hover { opacity: 0.85; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
   }
 
   .ticket-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
   }
 
   .ticket-row {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
+    padding: 18px 20px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -278,50 +286,47 @@
   }
 
   .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 12px;
-    font-weight: 600;
-    padding: 4px 10px;
+    font-weight: 500;
+    padding: 4px 12px 4px 8px;
     border-radius: 999px;
+    border: 1.5px solid var(--ink);
     white-space: nowrap;
   }
 
-  .badge.open { color: var(--status-open); background: var(--status-open-bg); }
-  .badge.in_progress { color: var(--status-progress); background: var(--status-progress-bg); }
-  .badge.closed { color: var(--status-closed); background: var(--status-closed-bg); }
+  .badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .badge.open .dot { background: var(--dot-open); }
+  .badge.in_progress .dot { background: var(--dot-progress); }
+  .badge.closed .dot { background: var(--dot-closed); }
 
   .btn-small {
-    background: var(--ink);
-    color: #fff;
-    border: none;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
     border-radius: 7px;
-    padding: 6px 12px;
+    padding: 6px 14px;
     font-size: 12px;
     font-weight: 600;
   }
 
-  .btn-small:hover { filter: brightness(1.15); }
+  .btn-small:hover { background: rgba(20,20,20,0.05); }
 
   .empty-state {
     text-align: center;
-    padding: 48px 16px;
+    padding: 56px 16px;
     color: var(--muted);
     font-size: 14px;
-  }
-
-  .switch-line {
-    text-align: center;
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 16px;
-  }
-
-  .switch-line button {
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-weight: 500;
-    font-size: 13px;
-    padding: 0;
+    border: 1.5px dashed var(--line);
+    border-radius: 10px;
   }
 </style>
 </head>
@@ -329,16 +334,16 @@
 
   <!-- ===== Auth screen ===== -->
   <div class="auth-screen" id="auth-screen">
-    <div class="auth-card">
-      <h1>Ticket Desk</h1>
+    <div class="auth-wrap">
+      <p class="wordmark display">Ticket Desk</p>
       <p class="subtitle">Track and manage your own support tickets.</p>
 
-      <div class="tabs">
-        <button class="tab active" id="tab-login" onclick="setAuthMode('login')">Log in</button>
-        <button class="tab" id="tab-register" onclick="setAuthMode('register')">Create account</button>
+      <div class="pill-row" style="margin-bottom:28px;">
+        <button class="pill active" id="tab-login" onclick="setAuthMode('login')">Log in</button>
+        <button class="pill" id="tab-register" onclick="setAuthMode('register')">Create account</button>
       </div>
 
-      <div class="error-banner" id="auth-error"></div>
+      <div class="banner error" id="auth-error"></div>
 
       <form id="login-form" onsubmit="return handleLogin(event)">
         <div class="field">
@@ -374,17 +379,17 @@
   <!-- ===== Dashboard ===== -->
   <div class="app" id="app">
     <div class="topbar">
-      <div class="brand">Ticket Desk</div>
+      <p class="wordmark display" style="font-size:20px; margin:0;">Ticket Desk</p>
       <div class="who">
         <span id="who-email"></span>
-        <button class="btn-ghost" onclick="handleLogout()">Log out</button>
+        <button class="btn-outline" onclick="handleLogout()">Log out</button>
       </div>
     </div>
 
     <div class="layout">
-      <div class="panel">
-        <h2>New ticket</h2>
-        <div class="error-banner" id="create-error"></div>
+      <div>
+        <p class="panel-title">New ticket</p>
+        <div class="banner error" id="create-error"></div>
         <form id="create-form" onsubmit="return handleCreateTicket(event)">
           <div class="field">
             <label for="ticket-title">Title</label>
@@ -394,12 +399,20 @@
             <label for="ticket-desc">Description</label>
             <textarea id="ticket-desc"></textarea>
           </div>
-          <button class="btn-primary" type="submit" id="create-submit">Create ticket</button>
+          <button class="btn-small-primary" type="submit" id="create-submit">Create ticket</button>
         </form>
       </div>
 
-      <div class="panel">
-        <h2>Your tickets</h2>
+      <div>
+        <div class="section-header">
+          <h2>Your tickets</h2>
+          <div class="pill-row" id="filter-row">
+            <button class="pill active" data-filter="all" onclick="setFilter('all')">All</button>
+            <button class="pill" data-filter="open" onclick="setFilter('open')">Open</button>
+            <button class="pill" data-filter="in_progress" onclick="setFilter('in_progress')">In progress</button>
+            <button class="pill" data-filter="closed" onclick="setFilter('closed')">Closed</button>
+          </div>
+        </div>
         <div id="ticket-list-wrap"></div>
       </div>
     </div>
@@ -411,6 +424,8 @@
 
   let token = localStorage.getItem('ticketdesk_token') || null;
   let userEmail = localStorage.getItem('ticketdesk_email') || '';
+  let allTickets = [];
+  let currentFilter = 'all';
 
   // ---------- Auth screen wiring ----------
 
@@ -420,23 +435,23 @@
     document.getElementById('tab-register').classList.toggle('active', !isLogin);
     document.getElementById('login-form').style.display = isLogin ? 'block' : 'none';
     document.getElementById('register-form').style.display = isLogin ? 'none' : 'block';
-    hideError('auth-error');
+    hideBanner('auth-error');
   }
 
-  function showError(elId, message) {
+  function showBanner(elId, message, kind) {
     const el = document.getElementById(elId);
     el.textContent = message;
-    el.classList.add('visible');
+    el.classList.remove('error', 'ok');
+    el.classList.add(kind || 'error', 'visible');
   }
 
-  function hideError(elId) {
-    const el = document.getElementById(elId);
-    el.classList.remove('visible');
+  function hideBanner(elId) {
+    document.getElementById(elId).classList.remove('visible');
   }
 
   async function handleLogin(e) {
     e.preventDefault();
-    hideError('auth-error');
+    hideBanner('auth-error');
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     const btn = document.getElementById('login-submit');
@@ -456,7 +471,7 @@
       localStorage.setItem('ticketdesk_email', userEmail);
       enterApp();
     } catch (err) {
-      showError('auth-error', err.message || 'Could not reach the server.');
+      showBanner('auth-error', err.message || 'Could not reach the server.', 'error');
     } finally {
       btn.disabled = false;
       btn.textContent = 'Log in';
@@ -466,7 +481,7 @@
 
   async function handleRegister(e) {
     e.preventDefault();
-    hideError('auth-error');
+    hideBanner('auth-error');
     const name = document.getElementById('register-name').value.trim();
     const email = document.getElementById('register-email').value.trim();
     const password = document.getElementById('register-password').value;
@@ -481,14 +496,11 @@
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Registration failed');
-      // Registered successfully — switch to the login tab so they can sign in.
       setAuthMode('login');
       document.getElementById('login-email').value = email;
-      showError('auth-error', 'Account created. Log in below.');
-      document.getElementById('auth-error').style.color = '#166534';
-      document.getElementById('auth-error').style.background = '#EAF7EE';
+      showBanner('auth-error', 'Account created. Log in below.', 'ok');
     } catch (err) {
-      showError('auth-error', err.message || 'Could not reach the server.');
+      showBanner('auth-error', err.message || 'Could not reach the server.', 'error');
     } finally {
       btn.disabled = false;
       btn.textContent = 'Create account';
@@ -533,17 +545,34 @@
   async function loadTickets() {
     const wrap = document.getElementById('ticket-list-wrap');
     try {
-      const tickets = await apiFetch('/tickets');
-      renderTickets(tickets);
+      allTickets = await apiFetch('/tickets');
+      renderTickets();
     } catch (err) {
       wrap.innerHTML = `<div class="empty-state">${escapeHtml(err.message)}</div>`;
     }
   }
 
-  function renderTickets(tickets) {
+  // Filtering happens entirely client-side over the tickets we already
+  // fetched from GET /tickets — no extra API calls, no backend changes.
+  function setFilter(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('#filter-row .pill').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    renderTickets();
+  }
+
+  function renderTickets() {
     const wrap = document.getElementById('ticket-list-wrap');
+    const tickets = currentFilter === 'all'
+      ? allTickets
+      : allTickets.filter(t => t.status === currentFilter);
+
     if (!tickets || tickets.length === 0) {
-      wrap.innerHTML = '<div class="empty-state">No tickets yet. Create your first one to get started.</div>';
+      const msg = currentFilter === 'all'
+        ? 'No tickets yet. Create your first one to get started.'
+        : `No ${statusLabel(currentFilter).toLowerCase()} tickets.`;
+      wrap.innerHTML = `<div class="empty-state">${msg}</div>`;
       return;
     }
 
@@ -566,7 +595,7 @@
             <p class="ticket-meta">Updated ${formatDate(t.updated_at)}</p>
           </div>
           <div class="ticket-side">
-            <span class="badge ${t.status}">${statusLabel(t.status)}</span>
+            <span class="badge ${t.status}"><span class="dot"></span>${statusLabel(t.status)}</span>
             ${actionBtn}
           </div>
         </div>
@@ -589,7 +618,7 @@
 
   async function handleCreateTicket(e) {
     e.preventDefault();
-    hideError('create-error');
+    hideBanner('create-error');
     const title = document.getElementById('ticket-title').value.trim();
     const description = document.getElementById('ticket-desc').value.trim();
     const btn = document.getElementById('create-submit');
@@ -605,7 +634,7 @@
       document.getElementById('ticket-desc').value = '';
       loadTickets();
     } catch (err) {
-      showError('create-error', err.message);
+      showBanner('create-error', err.message, 'error');
     } finally {
       btn.disabled = false;
       btn.textContent = 'Create ticket';
